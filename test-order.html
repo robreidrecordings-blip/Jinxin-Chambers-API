@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Order</title>
+</head>
+<body>
+    <h2>Create an Order</h2>
+    <button onclick="createOrder()">Send Order</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function createOrder() {
+            const orderData = {
+                payment_method: "paypal",
+                payment_method_title: "PayPal",
+                set_paid: false,
+                billing: {
+                    first_name: "John",
+                    last_name: "Doe",
+                    address_1: "123 Main St",
+                    city: "London",
+                    postcode: "SW1A 1AA",
+                    country: "GB",
+                    email: "john@example.com"
+                },
+                line_items: [
+                    {
+                        product_id: 804,   // ← CHANGE THIS TO A REAL PRODUCT ID
+                        quantity: 1
+                    }
+                ]
+            };
+
+            try {
+                const response = await fetch("http://localhost:4000/api/commerce/order/com", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(orderData)
+                });
+                const text = await response.text();
+                document.getElementById("result").innerText = text;
+            } catch (err) {
+                document.getElementById("result").innerText = "Error: " + err.message;
+            }
+        }
+    </script>
+</body>
+</html>
