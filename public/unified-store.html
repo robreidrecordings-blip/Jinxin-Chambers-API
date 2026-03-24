@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Copper Glow Shop – Unified Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f9fafb;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #b87333, #ffcd4d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .sub { color: #6b7280; margin-bottom: 2rem; }
+        .filters {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: #f3f4f6;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .filter-btn.active {
+            background: #b87333;
+            color: white;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .product {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .product:hover { transform: translateY(-4px); }
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f3f4f6;
+        }
+        .product h3 {
+            font-size: 1.2rem;
+            margin: 1rem;
+        }
+        .store-badge {
+            display: inline-block;
+            background: #1f2937;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2rem;
+            margin: 0 1rem;
+        }
+        .product p {
+            margin: 0.5rem 1rem 1rem;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        .price {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #b87333;
+            margin: 0 1rem;
+        }
+        .product a {
+            display: block;
+            background: #b87333;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            padding: 0.75rem;
+            margin: 1rem;
+            border-radius: 0.5rem;
+        }
+        .loading, .error { text-align: center; padding: 3rem; color: #6b7280; }
+        .error { color: #dc2626; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>✨ The Copper Glow Shop</h1>
+    <div class="sub">Handcrafted copper treasures from all our realms</div>
+
+    <div class="filters" id="filterBar">
+        <button class="filter-btn active" data-store="all">All Stores</button>
+        <button class="filter-btn" data-store="com">.com</button>
+        <button class="filter-btn" data-store="co_uk">.co.uk</button>
+        <button class="filter-btn" data-store="net">.net</button>
+    </div>
+
+    <div id="products" class="products">Loading products...</div>
+</div>
+
+<script>
+    const API_BASE = 'https://jinxin-chambers-api.onrender.com/api/commerce';
+    let allProducts = [];
+    let currentStore = 'all';
+
+    async function fetchStoreProducts(store) {
+        try {
+            const res = await fetch(`${API_BASE}/products/${store}?per_page=50`);
+            if (!res.ok) return [];
+            const products = await res.json();
+            return products.map(p => ({ ...p, store }));
+        } catch (err) {
+            console.warn(`Failed to load ${store}:`, err);
+            return [];
+        }
+    }
+
+    async function loadAllProducts() {
+        const container = document.getElementById('products');
+        container.innerHTML = '<div class="loading">Loading products...</div>';
+        const stores = ['com', 'co_uk', 'net'];
+        const results = await Promise.all(stores.map(store => fetchStoreProducts(store)));
+        allProducts = results.flat();
+        renderProducts();
+    }
+
+    function renderProducts() {
+        const container = document.getElementById('products');
+        let filtered = allProducts;
+        if (currentStore !== 'all') {
+            filtered = allProducts.filter(p => p.store === currentStore);
+        }
+        if (!filtered.length) {
+            container.innerHTML = '<div class="error">No products found.</div>';
+            return;
+        }
+        container.innerHTML = filtered.map(product => `
+            <div class="product">
+                ${product.images?.[0] ? `<img src="${product.images[0].src}" alt="${escapeHtml(product.name)}">` : '<div style="height:200px; background:#f3f4f6;"></div>'}
+                <span class="store-badge">${product.store}</span>
+                <h3>${escapeHtml(product.name)}</h3>
+                <p>${escapeHtml(product.short_description || product.description || '').substring(0, 100)}${(product.short_description || product.description || '').length > 100 ? '…' : ''}</p>
+                <div class="price">${product.price_html || product.price || 'Price on request'}</div>
+                <a href="product.html?store=${product.store}&id=${product.id}">View Details</a>
+            </div>
+        `).join('');
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m] || m));
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentStore = btn.dataset.store;
+            renderProducts();
+        });
+    });
+
+    loadAllProducts();
+</script>
+</body>
+</html>

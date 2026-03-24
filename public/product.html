@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product – The Copper Glow Shop</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f9fafb;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        img {
+            max-width: 100%;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        h1 { font-size: 1.8rem; margin-bottom: 1rem; }
+        .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #b87333;
+            margin-bottom: 1rem;
+        }
+        .description { line-height: 1.6; margin-bottom: 1.5rem; }
+        .back {
+            display: inline-block;
+            background: #f3f4f6;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            color: #1f2937;
+        }
+        .error, .loading { text-align: center; padding: 2rem; color: #6b7280; }
+        .error { color: #dc2626; }
+    </style>
+</head>
+<body>
+<div class="container" id="product">Loading product...</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const store = urlParams.get('store');
+    const id = urlParams.get('id');
+
+    async function loadProduct() {
+        const container = document.getElementById('product');
+        if (!store || !id) {
+            container.innerHTML = '<div class="error">Missing product information.</div>';
+            return;
+        }
+        try {
+            const res = await fetch(`https://jinxin-chambers-api.onrender.com/api/commerce/products/${store}/${id}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const p = await res.json();
+            container.innerHTML = `
+                <h1>${escapeHtml(p.name)}</h1>
+                ${p.images?.[0] ? `<img src="${p.images[0].src}" alt="${escapeHtml(p.name)}">` : ''}
+                <div class="price">${p.price_html || p.price || 'Price on request'}</div>
+                <div class="description">${p.description || p.short_description || 'No description available.'}</div>
+                <a href="unified-store.html" class="back">← Back to shop</a>
+            `;
+        } catch (err) {
+            container.innerHTML = `<div class="error">Failed to load product: ${err.message}</div>`;
+        }
+    }
+    function escapeHtml(str) { return (str || '').replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
+    loadProduct();
+</script>
+</body>
+</html>
