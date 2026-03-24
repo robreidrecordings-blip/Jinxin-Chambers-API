@@ -138,5 +138,7 @@ router.get('/radio', (req, res) => {
 router.get('/frequencies', (req, res) => {
   res.json({ message: 'Chakra frequencies – see /api/content/chakras' });
 });
-
+router.get('/test', (req, res) => {
+  res.json({ ok: true });
+});
 module.exports = router;
