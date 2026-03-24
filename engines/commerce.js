@@ -5,21 +5,21 @@ const router = express.Router();
 // Site configurations (loaded from environment variables)
 const sites = {
   uk: {
-    url: process.env.WC_UK_URL,
-    key: process.env.WC_UK_KEY,
-    secret: process.env.WC_UK_SECRET,
+    url: process.env.WC_UK_URL,https://thecopperglowshop.co.uk/wp-json/wc/v3
+    key: process.env.WC_UK_KEY,ck_4407d6335b0fb5a268c22a01104a93c491d4f1e6
+    secret: process.env.WC_UK_SECRET,cs_fe9a5a726282fec835a146c0da8fc1256e14abc4
     name: 'co.uk'
   },
   com: {
-    url: process.env.WC_COM_URL,
-    key: process.env.WC_COM_KEY,
-    secret: process.env.WC_COM_SECRET,
+    url: process.env.WC_COM_URL,https://thecopperglowshop.com/wp-json/wc/v3
+    key: process.env.WC_COM_KEY,ck_675973c22a0bcd23c3578bbd594d17af36383636
+    secret: process.env.WC_COM_SECRET,cs_5764236e6ec1d4bc9f5eb5c658f5de6fa78a480a
     name: 'com'
   },
   net: {
-    url: process.env.WC_NET_URL,
-    key: process.env.WC_NET_KEY,
-    secret: process.env.WC_NET_SECRET,
+    url: process.env.WC_NET_URL,https://thecopperglowshop.net/wp-json/wc/v3
+    key: process.env.WC_NET_KEY,ck_2f1a96f4c531e1c4a4ca224258203bfbe0b4191d
+    secret: process.env.WC_NET_SECRET,cs_1c2deeaf9a861137f438564051077dd27539ae61
     name: 'net'
   }
 };
