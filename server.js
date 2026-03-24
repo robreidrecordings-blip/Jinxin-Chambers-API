@@ -1,30 +1,30 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const morgan = require('morgan');
+const express    = require('express');
+const cors       = require('cors');
+const helmet     = require('helmet');
+const rateLimit  = require('express-rate-limit');
+const morgan     = require('morgan');
 require('dotenv').config();
 
 // Import engines
 const commerceEngine = require('./engines/commerce');
-const mediaEngine = require('./engines/media');
+const mediaEngine    = require('./engines/media');
 
 const app = express();
 
-// ---------- Global Middleware ----------
-app.set('trust proxy', 1);                 // For accurate rate‑limiting behind proxy
-app.use(helmet());                         // Security headers
-app.use(cors());                           // Allow all origins (adjust for production)
-app.use(express.json());                   // Parse JSON bodies
-app.use(morgan('combined'));               // Request logging
+// ── Global Middleware ─────────────────────────────────────────────────────────
+app.set('trust proxy', 1);
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+app.use(morgan('combined'));
 
-// Rate limiting (global)
+// ── Rate Limiting ─────────────────────────────────────────────────────────────
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 app.use('/api/', limiter);
 
-// ---------- Authentication ----------
+// ── Authentication ────────────────────────────────────────────────────────────
 const apiKeyMiddleware = (req, res, next) => {
-  const apiKey = req.headers['x-api-key'];
+  const apiKey     = req.headers['x-api-key'];
   const expectedKey = process.env.API_KEY;
   if (!expectedKey) {
     console.warn('API_KEY not set – authentication disabled');
@@ -36,35 +36,45 @@ const apiKeyMiddleware = (req, res, next) => {
   next();
 };
 
-// ---------- Protected Routes ----------
-// Apply authentication to sensitive commerce endpoints
-app.use('/api/commerce/order', apiKeyMiddleware);
+// ── Protected Routes ──────────────────────────────────────────────────────────
+app.use('/api/commerce/order',     apiKeyMiddleware);
 app.use('/api/commerce/dashboard', apiKeyMiddleware);
 
-// ---------- Mount Engines ----------
-// Commerce routes (public product endpoints, protected order/dashboard)
+// ── Mount Engines ─────────────────────────────────────────────────────────────
 app.use('/api/commerce', commerceEngine);
+app.use('/api/media',    mediaEngine);
 
-// Media routes (public)
-app.use('/api/media', mediaEngine);
-
-// ---------- Public Info Endpoints ----------
+// ── Public Endpoints ──────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.json({ status: 'online', timestamp: new Date().toISOString() });
 });
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Jinxin Chambers API', version: '1.0.0' });
+  res.json({
+    message: 'Jingin Chambers API',  // fixed: was 'Jinxin'
+    version: '1.0.0',
+    endpoints: {
+      health:    '/api/health',
+      media:     '/api/media/catalog',
+      products:  '/api/commerce/products',
+      dashboard: '/api/commerce/dashboard  (requires x-api-key header)'
+    }
+  });
 });
 
-// ---------- Error Handler ----------
+// ── 404 Handler ───────────────────────────────────────────────────────────────
+app.use((req, res, next) => {
+  res.status(404).json({ error: `Route not found: ${req.method} ${req.path}` });
+});
+
+// ── Error Handler ─────────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// ---------- Start Server ----------
+// ── Start Server ──────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Jingin Chambers API running on port ${PORT}`);
 });
