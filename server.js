@@ -17,7 +17,8 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(morgan('combined'));
-
+// ── Serve static frontend files from /public ─────────────────────────────────
+app.use(express.static('public'));   // <--- ADD THIS LINE
 // ── Rate Limiting ─────────────────────────────────────────────────────────────
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 app.use('/api/', limiter);
