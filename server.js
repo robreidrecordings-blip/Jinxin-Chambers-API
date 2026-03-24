@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 require('dotenv').config();
-
+const mediaEngine = require('./engines/media');
 const app = express();
 // Trust proxy (optional, silences rate‑limit warning)
 app.set('trust proxy', 1);
