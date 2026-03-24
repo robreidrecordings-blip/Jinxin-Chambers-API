@@ -30,7 +30,10 @@ const apiKeyMiddleware = (req, res, next) => {
 };
 const commerceEngine = require('./engines/commerce');
 app.use('/api/commerce', commerceEngine);
+app.use('/api/commerce', commerceEngine); // your existing commerce routes
 
+// Media engine – public, no auth required
+app.use('/api/media', mediaEngine);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'online', timestamp: new Date().toISOString() });
 });
