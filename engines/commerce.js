@@ -5,8 +5,8 @@ const router = express.Router();
 const stores = {
   com: {
     url: process.env.WC_COM_URL || 'https://thecopperglowshop.com',
-    consumerKey: process.env.WC_COM_CONSUMER_KEY,cs_658005c135102b6cfd8a41a994e43e56a998b486
-    consumerSecret: process.env.WC_COM_CONSUMER_SECRETck_ebad46e4eee1f66f5d805534f37abe5ff2cd19f1
+    consumerKey: process.env.WC_COM_CONSUMER_KEY,ck_abd69adccb7195fb52462acca03479d3e9fbcb17
+    consumerSecret: process.env.WC_COM_CONSUMER_SECRETcs_0757cba26afe2fb757091c045caedaae8f25df11
   },
   co_uk: {
     url: process.env.WC_CO_UK_URL || 'https://thecopperglowshop.co.uk',
