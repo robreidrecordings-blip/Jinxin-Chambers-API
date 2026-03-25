@@ -5,18 +5,18 @@ const router = express.Router();
 const stores = {
   com: {
     url: process.env.WC_COM_URL || 'https://thecopperglowshop.com',
-    consumerKey: process.env.WC_COM_CONSUMER_KEY,
-    consumerSecret: process.env.WC_COM_CONSUMER_SECRET
+    consumerKey: process.env.WC_COM_CONSUMER_KEY,cs_658005c135102b6cfd8a41a994e43e56a998b486
+    consumerSecret: process.env.WC_COM_CONSUMER_SECRETck_ebad46e4eee1f66f5d805534f37abe5ff2cd19f1
   },
   co_uk: {
     url: process.env.WC_CO_UK_URL || 'https://thecopperglowshop.co.uk',
-    consumerKey: process.env.WC_CO_UK_CONSUMER_KEY,
-    consumerSecret: process.env.WC_CO_UK_CONSUMER_SECRET
+    consumerKey: process.env.WC_CO_UK_CONSUMER_KEY,ck_4407d6335b0fb5a268c22a01104a93c491d4f1e6
+    consumerSecret: process.env.WC_CO_UK_CONSUMER_SECRETcs_fe9a5a726282fec835a146c0da8fc1256e14abc4
   },
   net: {
     url: process.env.WC_NET_URL || 'https://thecopperglowshop.net',
-    consumerKey: process.env.WC_NET_CONSUMER_KEY,
-    consumerSecret: process.env.WC_NET_CONSUMER_SECRET
+    consumerKey: process.env.WC_NET_CONSUMER_KEY,ck_2f1a96f4c531e1c4a4ca224258203bfbe0b4191d
+    consumerSecret: process.env.WC_NET_CONSUMER_SECRETcs_1c2deeaf9a861137f438564051077dd27539ae61
   }
 };
 
