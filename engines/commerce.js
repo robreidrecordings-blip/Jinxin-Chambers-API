@@ -1,26 +1,25 @@
 const express = require('express');
 const router = express.Router();
 
-// Store configurations – use environment variables
+// Store configurations – all three stores, using environment variables
 const stores = {
   com: {
     url: process.env.WC_COM_URL || 'https://thecopperglowshop.com',
-    consumerKey: process.env.WC_COM_CONSUMER_KEY,ck_675973c22a0bcd23c3578bbd594d17af36383636
-    consumerSecret: process.env.WC_COM_CONSUMER_SECRETcs_5764236e6ec1d4bc9f5eb5c658f5de6fa78a480a
+    consumerKey: process.env.WC_COM_CONSUMER_KEY,
+    consumerSecret: process.env.WC_COM_CONSUMER_SECRET
   },
   co_uk: {
     url: process.env.WC_CO_UK_URL || 'https://thecopperglowshop.co.uk',
-    consumerKey: process.env.WC_CO_UK_CONSUMER_KEY,ck_4407d6335b0fb5a268c22a01104a93c491d4f1e6
-    consumerSecret: process.env.WC_CO_UK_CONSUMER_SECRETcs_fe9a5a726282fec835a146c0da8fc1256e14abc4
+    consumerKey: process.env.WC_CO_UK_CONSUMER_KEY,
+    consumerSecret: process.env.WC_CO_UK_CONSUMER_SECRET
   },
   net: {
     url: process.env.WC_NET_URL || 'https://thecopperglowshop.net',
-    consumerKey: process.env.WC_NET_CONSUMER_KEY,ck_2f1a96f4c531e1c4a4ca224258203bfbe0b4191d
-    consumerSecret: process.env.WC_NET_CONSUMER_SECRETcs_1c2deeaf9a861137f438564051077dd27539ae61
+    consumerKey: process.env.WC_NET_CONSUMER_KEY,
+    consumerSecret: process.env.WC_NET_CONSUMER_SECRET
   }
 };
 
-// Helper to fetch from WooCommerce
 async function fetchFromWoo(store, endpoint, query = '') {
   const config = stores[store];
   if (!config) throw new Error(`Store ${store} not configured`);
@@ -33,8 +32,7 @@ async function fetchFromWoo(store, endpoint, query = '') {
   return res.json();
 }
 
-// ─── Public product endpoints (no API key required) ──────────────────────────
-
+// Public product endpoints
 router.get('/products/:store', async (req, res) => {
   const { store } = req.params;
   const { per_page = 50 } = req.query;
@@ -66,15 +64,12 @@ router.get('/sites', (req, res) => {
   res.json(sites);
 });
 
-// ─── Protected endpoints (placeholder – keep your existing logic) ──────────
-
+// Protected endpoints (placeholders – keep your existing logic)
 router.get('/dashboard', async (req, res) => {
-  // TODO: replace with your actual dashboard logic
   res.json({ total_orders: 0, total_revenue: '0.00', recent_orders: [], per_site: {} });
 });
 
 router.post('/order/:store', async (req, res) => {
-  // TODO: replace with your actual order creation logic
   res.json({ success: true });
 });
 
