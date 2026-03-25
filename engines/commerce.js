@@ -6,7 +6,7 @@ const stores = {
   com: {
     url: process.env.WC_COM_URL || 'https://thecopperglowshop.com',
     consumerKey: process.env.WC_COM_CONSUMER_KEY,
-    consumerSecret: process.env.WC_COM_CONSUMER_SECRET
+    consumerSecret: process.env.WC_COM_CONSUMER_SECRETcs_5764236e6ec1d4bc9f5eb5c658f5de6fa78a480a
   },
   co_uk: {
     url: process.env.WC_CO_UK_URL || 'https://thecopperglowshop.co.uk',
