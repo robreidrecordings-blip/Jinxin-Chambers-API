@@ -1,4 +1,5 @@
-
+const express = require('express');
+const router = express.Router();
 // ── WooCommerce fetch helper ───────────────────────────────────────────────────
 // Uses Basic Auth header instead of credentials in URL (safer — not logged)
 async function fetchFromWoo(store, endpoint, params = {}) {
