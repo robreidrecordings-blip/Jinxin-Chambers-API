@@ -1,5 +1,4 @@
-const express = require('express');
-const router = express.Router();
+
 // ── Store configurations ───────────────────────────────────────────────────────
 const stores = {
   com: {
@@ -18,6 +17,8 @@ const stores = {
    consumerSecret: process.env.WC_NET_CONSUMER_SECRETcs_1c2deeaf9a861137f438564051077dd27539ae61
   }
 };
+const express = require('express');
+const router = express.Router();
 
 // ── WooCommerce fetch helper ───────────────────────────────────────────────────
 // Uses Basic Auth header instead of credentials in URL (safer — not logged)
