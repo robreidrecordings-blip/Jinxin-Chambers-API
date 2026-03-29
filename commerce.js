@@ -11,13 +11,7 @@ const sites = {
     key:    process.env.WC_UK_KEY,
     secret: process.env.WC_UK_SECRET,
     name:   'co.uk'
-  },
-  com: {
-    url:    process.env.WC_COM_URL,
-    key:    process.env.WC_COM_KEY,
-    secret: process.env.WC_COM_SECRET,
-    name:   'com'
-  },
+   },
   net: {
     url:    process.env.WC_NET_URL,
     key:    process.env.WC_NET_KEY,
